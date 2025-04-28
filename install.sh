@@ -79,8 +79,11 @@ select theme in "${themes[@]}"; do
 
         # Set appropriate permissions
         sudo chmod 644 "$TARGET_DIR/sub.html"
-
         echo "Theme successfully renamed to 'sub.html' and moved to $TARGET_DIR."
+
+        # Applying Changes
+        echo "Restarting TX-UI ..."
+        sudo x-ui restart
         break
     else
         echo "Invalid selection. Please try again."
