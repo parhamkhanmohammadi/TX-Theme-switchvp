@@ -11,18 +11,18 @@ bash <(curl -Ls https://raw.githubusercontent.com/AghayeCoder/tx-themehub/master
 
 ## Usable Variables
 
-| Variable    | Description                                   |
-|------------|-----------------------------------------------|
-| `result`   | Returns the URI for Vmess/Vless.             |
-| `total`    | Returns the formatted total traffic.         |
-| `expire`   | End date as a timestamp.                     |
-| `upload`   | Returns the formatted uploaded traffic.      |
-| `download` | Returns the formatted downloaded traffic.    |
-| `totalByte` | Returns the total traffic in bytes.        |
-| `uploadByte` | Returns the total uploaded traffic in bytes. |
+| Variable       | Description                                    |
+| -------------- | ---------------------------------------------- |
+| `result`       | Returns the URI for Vmess/Vless.               |
+| `total`        | Returns the formatted total traffic.           |
+| `expire`       | End date as a timestamp.                       |
+| `upload`       | Returns the formatted uploaded traffic.        |
+| `download`     | Returns the formatted downloaded traffic.      |
+| `totalByte`    | Returns the total traffic in bytes.            |
+| `uploadByte`   | Returns the total uploaded traffic in bytes.   |
 | `downloadByte` | Returns the total downloaded traffic in bytes. |
-| `sId`      | Returns the subscription user ID.           |
-| `subUrl`   | Gets the full subscription URL.             |
+| `sId`          | Returns the subscription user ID.              |
+| `subUrl`       | Gets the full subscription URL.                |
 
 **example**
 ```html
@@ -40,3 +40,20 @@ bash <(curl -Ls https://raw.githubusercontent.com/AghayeCoder/tx-themehub/master
 4. Save the changes and restart the service.  
 
 If everything is done correctly, your custom template should now be displayed instead of the default subscription page.
+
+## ScreenShots
+<details>
+<summary>AIO UI</summary>
+
+![Screenshot](./screenshots/aio.png "aio")
+</details>
+<details>
+<summary>Black Eyes</summary>
+
+![Screenshot](./screenshots/blkeyes.png "blk")
+</details>
+<details>
+<summary>Fly Theme</summary>
+
+![Screenshot](./screenshots/fly.png "fly")
+</details>
