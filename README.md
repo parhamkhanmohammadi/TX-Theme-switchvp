@@ -57,3 +57,8 @@ If everything is done correctly, your custom template should now be displayed in
 
 ![Screenshot](./screenshots/fly.png "fly")
 </details>
+<details>
+<summary>TX v2</summary>
+
+![Screenshot](./screenshots/txv2.png "v2")
+</details>
