@@ -62,3 +62,8 @@ If everything is done correctly, your custom template should now be displayed in
 
 ![Screenshot](./screenshots/txv2.png "v2")
 </details>
+<details>
+<summary>Vislo</summary>
+
+![Screenshot](./screenshots/vislo.png "vislo")
+</details>
