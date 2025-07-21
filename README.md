@@ -23,6 +23,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/AghayeCoder/tx-themehub/master
 | `downloadByte` | Returns the total downloaded traffic in bytes. |
 | `sId`          | Returns the subscription user ID.              |
 | `subUrl`       | Gets the full subscription URL.                |
+| `jsonUrl`      | Gets the current subscription json URL         |
 
 **example**
 ```html
