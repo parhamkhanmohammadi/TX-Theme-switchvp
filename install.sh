@@ -57,7 +57,7 @@ select theme in "${themes[@]}"; do
         echo "You selected: $theme"
 
         # Download the selected theme file
-        FILE_URL="https://raw.githubusercontent.com/aghayecoder/tx-themehub/main/themes/$theme"
+        FILE_URL="https://raw.githubusercontent.com/parhamkhanmohammadi/TX-Theme-switchvp/main/themes/$theme"
         TEMP_FILE="/tmp/$theme"
 
         echo "Downloading $theme..."
