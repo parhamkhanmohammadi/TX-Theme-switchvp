@@ -6,7 +6,7 @@ TX-UI Panel Subscription Page Templates Designed By TX Community.
 
 you can install pre-designed user themes as your sub custom ui using below command in terminal:
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com//parhamkhanmohammadi/TX-Theme-switchvp/master/install.sh)
+bash <(curl -Ls https://github.com//parhamkhanmohammadi/TX-Theme-switchvp/master/install.sh)
 ```
 
 ## Usable Variables
