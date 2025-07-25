@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔒 SWITCH VP | داشبورد اشتراک</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Vazirmatn Font -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@33.003/Vazirmatn-Variable-font-face.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-start: #0d1117;
+            --bg-end: #161b22;
+            --card-bg: rgba(22, 27, 34, 0.7);
+            --border-color: rgba(48, 54, 61, 0.7);
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-primary: #58a6ff;
+            --accent-secondary: #3fb950;
+            --accent-danger: #f85149;
+        }
+
+        @property --p {
+            syntax: '<number>';
+            inherits: true;
+            initial-value: 0;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, var(--bg-start), var(--bg-end), #010409, var(--bg-start));
+            background-size: 400% 400%;
+            animation: gradientBG 25s ease infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);
+        }
+
+        .usage-gauge {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: 
+                radial-gradient(farthest-side, var(--card-bg) 79%, transparent 80% 100%),
+                conic-gradient(var(--accent-primary) calc(var(--p) * 1%), var(--border-color) 0);
+            transition: --p 1s ease-in-out;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+        
+        /* Staggered animation */
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in {
+            opacity: 0;
+            animation: slide-up 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="animated-bg"></div>
+
+    <main class="relative z-10 container mx-auto p-4 md:p-6 max-w-6xl space-y-8">
+        <!-- Header -->
+        <header class="text-center py-6 animate-in" style="animation-delay: 100ms;">
+            <img src="https://s6.uplod.ir/i/01168/tncmn9ebfj0w.png" alt="Switch VP Logo" class="w-20 h-20 mx-auto mb-4">
+            <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white">
+                داشبورد اشتراک شما
+            </h1>
+            <p class="text-secondary text-md mt-2">شناسه: <span class="font-mono tracking-widest">{{ .sId }}</span></p>
+        </header>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left/Top Column -->
+            <div class="lg:col-span-1 space-y-8">
+                <!-- Status Card -->
+                <div class="card p-6 text-center animate-in" style="animation-delay: 200ms;">
+                    <div id="usage-gauge" class="usage-gauge mx-auto">
+                        <div class="text-center">
+                            <p id="usage-percent" class="text-3xl font-bold text-white">0%</p>
+                            <p class="text-sm text-secondary">مصرف شده</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p id="status" class="text-2xl font-bold"></p>
+                        <p id="remainingTime" class="text-secondary mt-1"></p>
+                    </div>
+                    <hr class="border-gray-700/50 my-4">
+                    <div class="flex justify-around text-sm">
+                        <div>
+                            <p class="text-secondary">دانلود</p>
+                            <p class="font-bold text-white mt-1">{{ .download }}</p>
+                        </div>
+                        <div>
+                            <p class="text-secondary">آپلود</p>
+                            <p class="font-bold text-white mt-1">{{ .upload }}</p>
+                        </div>
+                        <div>
+                            <p class="text-secondary">کل حجم</p>
+                            <p id="totalText" class="font-bold text-white mt-1"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR & Copy Card -->
+                <div class="card p-6 animate-in" style="animation-delay: 300ms;">
+                     <div class="p-2 bg-white rounded-lg inline-block shadow-lg mx-auto block w-fit">
+                        <canvas id="qrcode"></canvas>
+                    </div>
+                    <button onclick="copyToClipboard('{{ .subUrl }}', this)" class="w-full mt-4 text-md font-bold flex items-center justify-center gap-3 px-4 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-all transform hover:scale-102 shadow-lg shadow-blue-600/20">
+                        <i data-lucide="copy"></i>
+                        <span>کپی لینک اشتراک</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right/Bottom Column -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="card p-6 animate-in" style="animation-delay: 400ms;">
+                    <h2 class="text-xl font-bold mb-4 text-white">راهنمای نصب و اتصال</h2>
+                    <div id="apps-accordion" class="space-y-3">
+                        <!-- Accordion items will be injected here -->
+                    </div>
+                </div>
+                
+                <div class="card p-6 animate-in" style="animation-delay: 500ms;">
+                    <h2 class="text-xl font-bold mb-4 text-white">پشتیبانی و راهنما</h2>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="https://t.me/SwitchVpSupport" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-700/50 hover:bg-gray-700 border border-transparent hover:border-gray-600 rounded-lg transition-all">
+                            <i data-lucide="message-square"></i> پشتیبانی تلگرام
+                        </a>
+                        <a href="https://t.me/SwitchVp" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-700/50 hover:bg-gray-700 border border-transparent hover:border-gray-600 rounded-lg transition-all">
+                             <i data-lucide="send"></i> کانال رسمی
+                        </a>
+                        <a href="https://Instagram.com/switchvp.ir/" target="_blank" class="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-700/50 hover:bg-gray-700 border border-transparent hover:border-gray-600 rounded-lg transition-all">
+                            <i data-lucide="instagram"></i> اینستاگرام
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Data Parsing ---
+        const totalByte = parseInt('{{ .totalByte }}', 10) || 0;
+        const usedBytes = parseInt('{{ .downloadByte }}', 10) + parseInt('{{ .uploadByte }}', 10) || 0;
+        const expireValue = '{{ .expire }}';
+        const expireTimestamp = expireValue !== '0' ? parseInt(expireValue, 10) * 1000 : 0;
+        
+        // --- Usage Gauge ---
+        const usageGauge = document.getElementById('usage-gauge');
+        const usagePercentEl = document.getElementById('usage-percent');
+        let usagePercentage = 0;
+        if (totalByte > 0) {
+            usagePercentage = Math.min(100, (usedBytes / totalByte) * 100);
+        }
+        setTimeout(() => {
+            usageGauge.style.setProperty('--p', usagePercentage.toFixed(2));
+            usagePercentEl.textContent = `${Math.round(usagePercentage)}%`;
+        }, 300);
+        
+        // --- Texts and Status ---
+        document.getElementById('totalText').textContent = totalByte > 0 ? formatBytes(totalByte) : '∞';
+        const statusElement = document.getElementById('status');
+        const remainingTimeElement = document.getElementById('remainingTime');
+        
+        const isExpired = expireTimestamp > 0 && expireTimestamp < Date.now();
+        const isOverused = totalByte > 0 && usedBytes >= totalByte;
+
+        if (isExpired || isOverused) {
+            statusElement.textContent = 'غیرفعال';
+            statusElement.style.color = 'var(--accent-danger)';
+            remainingTimeElement.textContent = isExpired ? 'اشتراک منقضی شده' : 'حجم به پایان رسیده';
+        } else {
+            statusElement.textContent = 'فعال';
+            statusElement.style.color = 'var(--accent-secondary)';
+            if (expireTimestamp > 0) {
+                const diff = expireTimestamp - Date.now();
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                remainingTimeElement.textContent = days > 0 ? `${days} روز باقی‌مانده` : 'کمتر از یک روز';
+            } else {
+                remainingTimeElement.textContent = 'اشتراک دائمی';
+            }
+        }
+
+        // --- QR Code ---
+        try {
+            new QRious({ element: document.getElementById('qrcode'), value: '{{ .subUrl }}', size: 140, level: 'H', padding: 0 });
+        } catch (e) { console.error("QR Code Error:", e); }
+
+        // --- Accordion Setup ---
+        const apps = [
+            { id: 'android', name: 'Android', icon: 'smartphone', downloadUrl: 'https://t.me/SwitchVpGuide/4', tutorialUrl: 'https://t.me/SwitchVpGuide/10?single' },
+            { id: 'ios', name: 'iOS (iPhone & iPad)', icon: 'apple', downloadUrl: 'https://t.me/SwitchVpGuide/4', tutorialUrl: 'https://t.me/SwitchVpGuide/17?single' },
+            { id: 'windows', name: 'Windows', icon: 'laptop', downloadUrl: 'https://t.me/SwitchVpGuide/4', tutorialUrl: 'https://t.me/SwitchVpGuide/25?single' },
+            { id: 'macos', name: 'macOS', icon: 'monitor', downloadUrl: 'https://t.me/SwitchVpGuide/4', tutorialUrl: 'https://t.me/SwitchVpGuide' }
+        ];
+        
+        const platform = navigator.userAgent.toLowerCase();
+        let detectedOS = null;
+        if (platform.includes('win')) detectedOS = 'windows';
+        else if (platform.includes('mac') && !platform.includes('iphone')) detectedOS = 'macos';
+        else if (platform.includes('iphone') || platform.includes('ipad')) detectedOS = 'ios';
+        else if (platform.includes('android')) detectedOS = 'android';
+
+        apps.sort((a, b) => (a.id === detectedOS) ? -1 : (b.id === detectedOS) ? 1 : 0);
+        
+        const accordionContainer = document.getElementById('apps-accordion');
+        apps.forEach(app => {
+            const isRecommended = app.id === detectedOS;
+            const item = document.createElement('div');
+            item.className = 'border border-gray-700/50 rounded-lg';
+            item.innerHTML = `
+                <div class="accordion-header cursor-pointer flex items-center justify-between p-4 hover:bg-gray-800/50 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="${app.icon}" class="${isRecommended ? 'text-blue-400' : ''}"></i>
+                        <span class="font-bold text-white">${app.name}</span>
+                        ${isRecommended ? '<span class="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">پیشنهادی</span>' : ''}
+                    </div>
+                    <i data-lucide="chevron-down" class="transition-transform"></i>
+                </div>
+                <div class="accordion-content px-4">
+                    <div class="py-4 border-t border-gray-700/50 flex flex-col sm:flex-row gap-3">
+                        <a href="${app.downloadUrl}" target="_blank" class="flex-1 text-center font-semibold py-2 px-4 bg-gray-600/50 hover:bg-gray-600 rounded-md transition-colors">دانلود برنامه</a>
+                        <a href="${app.tutorialUrl}" target="_blank" class="flex-1 text-center font-semibold py-2 px-4 bg-blue-600/80 hover:bg-blue-600 rounded-md transition-colors">مشاهده آموزش</a>
+                    </div>
+                </div>
+            `;
+            accordionContainer.appendChild(item);
+        });
+        
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('[data-lucide="chevron-down"]');
+                
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    content.style.paddingTop = '0';
+                    content.style.paddingBottom = '0';
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    content.style.paddingTop = '1rem';
+                    content.style.paddingBottom = '1rem';
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+
+        // --- Final Touches ---
+        lucide.createIcons();
+    });
+
+    // --- Global Helper Functions ---
+    function formatBytes(bytes, decimals = 2) {
+        if (!+bytes) return '0 بایت';
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['بایت', 'کیلوبایت', 'مگابایت', 'گیگابایت', 'ترابایت'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+    }
+
+    async function copyToClipboard(text, element) {
+        try {
+            await navigator.clipboard.writeText(text);
+            if (element) {
+                const originalText = element.querySelector('span').textContent;
+                element.querySelector('span').textContent = 'کپی شد!';
+                element.querySelector('i').setAttribute('data-lucide', 'check');
+                lucide.createIcons();
+                element.classList.replace('bg-blue-600', 'bg-green-600');
+                
+                setTimeout(() => {
+                    element.querySelector('span').textContent = originalText;
+                    element.querySelector('i').setAttribute('data-lucide', 'copy');
+                    lucide.createIcons();
+                    element.classList.replace('bg-green-600', 'bg-blue-600');
+                }, 2000);
+            }
+        } catch (err) { console.error('Failed to copy: ', err); }
+    }
+    </script>
+</body>
+</html>
